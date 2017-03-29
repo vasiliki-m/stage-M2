@@ -58,7 +58,6 @@ for i=22:49
         p1 = [Data_cor.CH(j+1,i),Data_cor.CJ(j+1,i)]; 
         a_rot(j,i) = find_angle(p0,p1,c) ;
         
-        
     end
 %     MAX = max(a_rot(:,i));
 %     pos = find(a_rot(:,i)==MAX);
@@ -87,8 +86,8 @@ for i=22:49
     x_tige_init = Data_cor.CH(10,1); %Calibration x_tige
     z_tige_init = Data_cor.CJ(10,1); %Calibration z_tige
     
-    x_cible(1,i)=0.2954;      %Calibration x_poing    Data_cor.CK(1,i);%
-    z_cible(1,i) = 0.51866;     %Calibration z_poing    Data_cor.CM(1,i);%
+    x_cible(1,i)=0.2954;      %Calibration x_poing    
+    z_cible(1,i) = 0.51866;     %Calibration z_poing   
     
     
     x_tige_rot = Data_cor.CH(10,i); %Initial x for the rotation
@@ -139,23 +138,75 @@ for i=22:49
     end
 
 end
-%loop for the coordinates of static in the beginning 
+
+
+%find the coordinates of static in the beginning 
+%angle2 = find_angle([Data_cor.CH(10,1),Data_cor.CJ(10,1)],[0.2954,0.51866],c); %angle between 'tige' and target in the calibration
+
+
+
 for i=1:21
-    for j=1:A(1)
-        x_menton(j,i) = Data_cor.CK(10,i);
-        z_menton(j,i) = Data_cor.CM(10,i);
-        [x_cible(j,i),z_cible(j,i)] = rotation_target(16,Center_x,Center_z,Data_cor.CH(j,i),Data_cor.CJ(j,i));
-    end
+    x_cible(:,i)=0.2954;      %Calibration x_poing    
+    z_cible(:,i) =0.51866;     %Calibration z_poing   
+    
+    angle_tige2 = find_angle([Data_cor.CH(10,1),Data_cor.CJ(10,1)],[Data_cor.CH(10,i),Data_cor.CJ(10,i)],c);
+    [x_cible(:,i),z_cible(:,i)] = rotation_target(angle_tige2,Center_x,Center_z,x_cible(:,i),z_cible(:,i)); %rotation of the coordinates of the 'tige'
+
+    
+    x_menton(:,i) = Data_cor.CK(10,i); %Xpoing
+    z_menton(:,i) = Data_cor.CM(10,i); %Zpoing
+
+
+%     for j=2:A(1)
+%         x_menton(j,i) = Data_cor.CK(10,i); %Xpoing
+%         z_menton(j,i) = Data_cor.CM(10,i); %Zpoing
+        
+        
+%         dx_init = Data_cor.CH(j,i) - Data_cor.CH(j,1);
+%         dz_init = Data_cor.CJ(j,i) - Data_cor.CJ(j,1);
+%     
+%         x_cible(j+1,i) = x_cible(j,i) + dx_init;
+%         z_cible(j+1,i) = z_cible(j,i) + dz_init;
+% 
+        
+       % angle_tige2 = find_angle([Data_cor.CH(j,i),Data_cor.CJ(j,i)],[Data_cor.CH(j+1,i),Data_cor.CJ(j+1,i)],c); %angle between the 'tige'
+
+      %  [x_cible(j,i),z_cible(j,i)] = rotation_target(-angle2,Center_x,Center_z,Data_cor.CH(j,1),Data_cor.CJ(j,1)); %rotation of the coordinates of the 'tige'
+    %end
 end
 
-%loop for the coordinates of static in the end
+%find for the coordinates of static in the end
 for i=50:54
-    for j=1:A(1)
-        x_menton(j,i) = Data_cor.CK(10,i);
-        z_menton(j,i) = Data_cor.CM(10,i);
-        [x_cible(j,i),z_cible(j,i)] = rotation_target(16,Center_x,Center_z,Data_cor.CH(j,i),Data_cor.CJ(j,i));
+    x_cible(:,i)=0.2954;      %Calibration x_poing    
+    z_cible(:,i) = 0.51866;     %Calibration z_poing   
+    
+    angle_tige3 = find_angle([Data_cor.CH(10,1),Data_cor.CJ(10,1)],[Data_cor.CH(10,i),Data_cor.CJ(10,i)],c);
+    [x_cible(:,i),z_cible(:,i)] = rotation_target(angle_tige3,Center_x,Center_z,x_cible(:,i),z_cible(:,i)); %rotation of the coordinates of the 'tige'
 
-    end
+    
+    
+    x_menton(:,i) = Data_cor.CK(10,i);
+    z_menton(:,i) = Data_cor.CM(10,i);
+
+
+%     for j=2:A(1)
+%         x_menton(j,i) = Data_cor.CK(10,i);
+%         z_menton(j,i) = Data_cor.CM(10,i);
+        
+
+%         dx_init = Data_cor.CH(j,i) - Data_cor.CH(j,1);
+%         dz_init = Data_cor.CJ(j,i) - Data_cor.CJ(j,1);
+%     
+%         x_cible(j+1,i) = x_cible(j,i) + dx_init;
+%         z_cible(j+1,i) = z_cible(j,i) + dz_init;
+
+        
+       %angle_tige3 = find_angle([Data_cor.CH(j,1),Data_cor.CJ(j,1)],[Data_cor.CH(j+1,i),Data_cor.CJ(j+1,i)],c); %angle between the 'tige'
+
+        %[x_cible(j,i),z_cible(j,i)] = rotation_target(-angle3,Center_x,Center_z,x_cible(j,1),z_cible(j,1)); %rotation of the coordinates of the 'tige'
+
+        %[x_cible(j,i),z_cible(j,i)] = rotation_target(-16,Center_x,Center_z,Data_cor.CH(j,i),Data_cor.CJ(j,i));
+    %end
 end
 
 
